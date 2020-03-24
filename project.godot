@@ -1,0 +1,35 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "Dot",
+"language": "GDScript",
+"path": "res://src/dot.gd"
+}, {
+"base": "Node",
+"class": "Virus",
+"language": "GDScript",
+"path": "res://src/virus.gd"
+} ]
+_global_script_class_icons={
+"Dot": "",
+"Virus": ""
+}
+
+[application]
+
+config/name="wusely"
+run/main_scene="res://src/game.tscn"
+config/icon="res://icon.png"
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
