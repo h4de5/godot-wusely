@@ -15,12 +15,18 @@ _global_script_classes=[ {
 "path": "res://src/dot.gd"
 }, {
 "base": "Node",
+"class": "Infection",
+"language": "GDScript",
+"path": "res://src/infection.gd"
+}, {
+"base": "Node",
 "class": "Virus",
 "language": "GDScript",
 "path": "res://src/virus.gd"
 } ]
 _global_script_class_icons={
 "Dot": "",
+"Infection": "",
 "Virus": ""
 }
 
