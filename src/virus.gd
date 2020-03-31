@@ -22,7 +22,7 @@ const time_to_death = 200
 # 
 
 # how likely it is to infect other people
-const chance_of_infection : float = 0.5
+const chance_of_infection : float = 0.8
 # how likely it is to show symptoms
 const chance_of_contagion : float = 1.0
 # how likely it is to show symptoms
