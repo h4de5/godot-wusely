@@ -1,8 +1,6 @@
 extends Node
-#extends Reference
-
-# class_name Infection
-#const Virus = preload("res://src/virus.gd")
+# only node type can have a _process method
+# extends Reference
 
 const TIME_SCALE = 0.1
 
@@ -21,8 +19,13 @@ signal SIGNAL_CURED
 signal SIGNAL_IMMUNE
 signal SIGNAL_DEATH
 
+# infection.connect("SIGNAL_VULNERABLE", infection, "on_contagion")
+# infection.emit_signal("SIGNAL_CONTAGIOUS")
+
 # depends on other variables, cannot be set
 var is_vulnerable : bool = true setget , get_vulnerable
+# depends on other variables, cannot be set
+var is_not_vulnerable : bool = true setget , get_not_vulnerable
 # is set the host is infected by a given virus
 var is_infected : bool = false setget set_infected
 # whenever a host shows symptoms of an infection
@@ -62,22 +65,20 @@ func get_vulnerable():
 	else: 
 		return false
 
+func get_not_vulnerable():
+	return ! is_vulnerable
+
 func set_host(h):
 	host = h
-	
+
 func set_virus(v):
 	virus = v
 	timer_to_contagion = virus.time_to_contagion * TIME_SCALE
 	timer_to_symptoms = virus.time_to_symptoms * TIME_SCALE
 	timer_to_cure = virus.time_to_cure * TIME_SCALE
 	timer_to_death = virus.time_to_death * TIME_SCALE
-	
 	on_infected()
 
-func _ready():
-#	connect("SIGNAL_VULNERABLE", self, on_contagion)
-	pass
-	
 func _process(delta: float) -> void:
 	# reduce timers by delta time
 	if timer_to_contagion > 0:

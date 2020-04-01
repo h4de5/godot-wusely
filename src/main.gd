@@ -13,7 +13,7 @@ func _ready():
 	
 func set_hosts():
 	
-	for i in range(80):
+	for i in range(120):
 		get_node("hosts").add_child(host.instance())
 	outbreak()
 	
