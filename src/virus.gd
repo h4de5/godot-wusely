@@ -14,7 +14,7 @@ const time_to_cure = 100
 const time_to_death = 200
 
 # TODO - missing time variations
-# when does cure start?
+# when does cure start? - immediatly after infection
 # what if host does not show symptoms, when does cure start?
 # can there be contagious without symptoms
 # can there be death without symptoms

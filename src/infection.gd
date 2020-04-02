@@ -66,7 +66,8 @@ func get_vulnerable():
 		return false
 
 func get_not_vulnerable():
-	return ! is_vulnerable
+	# return ! get_vulnerable()
+	return self.is_vulnerable
 
 func set_host(h):
 	host = h

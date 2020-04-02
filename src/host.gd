@@ -8,6 +8,23 @@ const COLOR_DEATH = Color.black
 onready var sprite = get_node("Sprite")
 onready var infections = get_node("Infections")
 
+### host attributes
+# whenever a dot is dead
+var is_dead : bool = false setget set_dead
+# whenever a dot is in quarantined
+var is_quarantined : bool = false setget set_quarantined
+# whenever a dot is in hospital
+var is_hospitalized : bool = false setget set_hospitalized
+
+# city in which the host belongs to
+var city
+
+# movement direction
+var direction : Vector2 = Vector2(0,0)
+# current speed, comes from city, will be set in birth
+var movement_speed
+
+### infection attributes
 # those getters will search through all current infections of a host
 # is set the host is infected by a given virus
 var is_infected : bool = false setget , get_infected
@@ -16,21 +33,21 @@ var is_symptoms : bool = false setget , get_symptoms
 # defines if a Host is contagious
 var is_contagious : bool = false setget , get_contagious
 
-# whener a dot is dead
-var is_dead : bool = false setget set_dead
-var direction : Vector2 = Vector2(0,0)
-var speed = 1.2
-
 func set_dead(val: bool):
 	is_dead = val
-	
-func get_infected():
+func set_quarantined(val: bool):
+	is_quarantined = val
+func set_hospitalized(val: bool):
+	is_hospitalized = val
+
+func get_infected() -> bool:
 	return find_infection('is_infected', null)
-func get_symptoms():
+func get_symptoms() -> bool:
 	return find_infection('is_symptoms', null)
-func get_contagious():
+func get_contagious() -> bool:
 	return find_infection('is_contagious', null)
 
+# find a given attribute from any (null) or a specific virus
 func find_infection(attribute, virus = null):
 	if infections.get_child_count() > 0:
 		for infection in infections.get_children():
@@ -46,7 +63,7 @@ func infect(virus):
 	#var infection : Infection
 	# create a new infection based on given virus
 	# for reference
-	#var infection = load("res://src/infection.gd").new()
+	# var infection = load("res://src/infection.gd").new()
 	# for nodes
 	var infection = load("res://src/infection.tscn").instance()
 	# TODO - change here to duplicate/clone - instead of ref
@@ -54,13 +71,12 @@ func infect(virus):
 	infection.virus = virus
 	# add infection to hosts list
 	infections.add_child(infection)
-
 	
 	# return it, for later use..
 	return infection
 
 # check if a virus can infect the host
-func infectable(virus):
+func infectable(virus) -> bool:
 	var is_vulnerable = true
 	# TODO - even a dead body could be vulnerable
 	if is_dead:
@@ -98,14 +114,22 @@ func _ready():
 	# start direction
 	direction = Vector2(randf() * 400 -200, randf() * 400 -200)
 
+func birth(city):
+	self.city = city
+	movement_speed = city.movement_speed
+	
 func _process(delta: float) -> void:
 	 # Get velocity
-	var velocity = speed * direction # move slow? increases speed or multiply this x 100
-	# move and slide:
+	var velocity = movement_speed * direction
+	
+	# if host is dead - slowing down until stopping
 	if is_dead:
-		speed *= 0.99
-	if is_symptoms:
+		movement_speed *= 0.98
+	# if host show symptoms, drop movement speed
+	#if get_symptoms():
+	if self.is_symptoms:
 		velocity /= 2
+	
 	move_and_slide(velocity)
 	# check if there is a collision:
 	if get_slide_count() > 0:
