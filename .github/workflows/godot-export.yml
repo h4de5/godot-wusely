@@ -25,11 +25,10 @@ jobs:
         # download asset pack
       - name: Download Asset Pack
         run: |
-          echo "share/godot directory"
-          ls -la /home/runner/.local/share/godot
           echo "github workspace: ${GITHUB_WORKSPACE}"
-          ls -la ${GITHUB_WORKSPACE}
-          sudo apt -yq install wget unzip
+          ls -la "${GITHUB_WORKSPACE}"
+          #sudo apt -yq install wget unzip
+          sudo apt -y install wget unzip
           wget -q -O "${GITHUB_WORKSPACE}/assets.zip" "${{ secrets.asset_pack_url }}"
           unzip -oqq "${GITHUB_WORKSPACE}/assets.zip"
           rm -f "${GITHUB_WORKSPACE}/assets.zip"
