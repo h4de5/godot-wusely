@@ -143,36 +143,40 @@ func _physics_process(delta: float) -> void:
 		if !has_sound():
 			# if symptoms are shown - make some noise
 			Effects.cough(self)
+	
 		
 		# check which hosts are nearby
 		var nearby_hosts = area.get_overlapping_areas()
 		if len(nearby_hosts) > 0:
 			for nearby_host in nearby_hosts:
-#				print("found host: ", nearby_host)
-#				print("direction: ", (nearby_host.position - self.position))
-#				print("normalized: ", (nearby_host.position - self.position).normalized())
-#				print("length: ", (nearby_host.position - self.position).length())
-#				print("distance: ", (nearby_host.position - self.position).length())
-#				print("#####")
-#				direction = ( (self.position - ).normalized()).normalized()
-#				direction = self.position.reflect((nearby_host.position - self.position).normalized())
+	#				print("found host: ", nearby_host)
+	#				print("direction: ", (nearby_host.position - self.position))
+	#				print("normalized: ", (nearby_host.position - self.position).normalized())
+	#				print("length: ", (nearby_host.position - self.position).length())
+	#				print("distance: ", (nearby_host.position - self.position).length())
+	#				print("#####")
+	#				direction = ( (self.position - ).normalized()).normalized()
+	#				direction = self.position.reflect((nearby_host.position - self.position).normalized())
 				var collision_vector = nearby_host.global_position - self.position
 				var normalized_direction = collision_vector.normalized()
 				var inverse_distance = area_shape.shape.radius*2 - collision_vector.length()
-#				var inverse_distance_lerped = 1 - inverse_lerp(0, area_shape.shape.radius*2, collision_vector.length())
-				var inverse_distance_lerped = 1 - inverse_lerp(0, pow(area_shape.shape.radius*2, 2), pow(collision_vector.length(),2) )
-#
-#				print("positions: ", nearby_host.position, " self: ", self.position)
-#				print("area_shape.shape.radius: ", area_shape.shape.radius)
-#				print("collision_vector: ", collision_vector)
-#				print("vector_length: ", collision_vector.length())
-#				print("normalized_direction: ", normalized_direction)
-#				print("inverse_distance: ", inverse_distance)
-#				print("inverse_distance_lerped: ", inverse_distance_lerped)
-#				print("#####")
-
-#				direction = direction - (inverse_distance_lerped * normalized_direction * delta) / (len(nearby_hosts))
+				var inverse_distance_lerped = 1 - inverse_lerp(0, area_shape.shape.radius*2, collision_vector.length())
+	#				var inverse_distance_lerped = 1 - inverse_lerp(0, pow(area_shape.shape.radius*2, 2), pow(collision_vector.length(),2) )
+	#
+	#				print("positions: ", nearby_host.position, " self: ", self.position)
+	#				print("area_shape.shape.radius: ", area_shape.shape.radius)
+	#				print("collision_vector: ", collision_vector)
+	#				print("vector_length: ", collision_vector.length())
+	#				print("normalized_direction: ", normalized_direction)
+	#				print("inverse_distance: ", inverse_distance)
+	#				print("inverse_distance_lerped: ", inverse_distance_lerped)
+	#				print("#####")
+				
+				#if is_symptoms or nearby_host.owner.is_symptoms:
+				
+				direction = direction - (inverse_distance_lerped * normalized_direction * delta) / (len(nearby_hosts))
 				nearby_host.owner.direction = nearby_host.owner.direction + (inverse_distance_lerped * normalized_direction * delta) / (len(nearby_hosts))
+	#				nearby_host.owner.direction = nearby_host.owner.direction + (inverse_distance_lerped * normalized_direction * delta)
 
 	 # Get velocity
 	var velocity = movement_speed * direction
