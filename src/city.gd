@@ -10,9 +10,10 @@ export var hospital_beds = 20
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	set_hosts()
+	create_hosts()
 
-func set_hosts():
+# add all hosts to the city scene
+func create_hosts():
 	var citizen
 	for i in range(citizens):
 		citizen = host.instance()
@@ -20,7 +21,10 @@ func set_hosts():
 		get_node("hosts").add_child(citizen)
 	outbreak()
 
+# set the virus free
 func outbreak():
+	printerr("So it begins..")
+	
 	var virus = load("res://src/virus.gd").new()
 	var patient0 = host.instance()
 	patient0.birth(self)

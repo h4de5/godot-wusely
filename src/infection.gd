@@ -112,19 +112,19 @@ func on_infected():
 	emit_signal("SIGNAL_INFECTED")
 	
 func on_contagion():
-	if virus.chance(virus.chance_of_contagion):
+	if Effects.chance(virus.chance_of_contagion):
 		is_contagious = true
 		host.set_color(COLOR_CONTAGIOUS)
 		emit_signal("SIGNAL_CONTAGIOUS")
 
 func on_symptoms():
-	if virus.chance(virus.chance_of_symptoms):
+	if Effects.chance(virus.chance_of_symptoms):
 		is_symptoms = true
 		host.set_color(COLOR_SYMPTOMS)
 		emit_signal("SIGNAL_SYMPTOMS")
 
 func on_cure():
-	if virus.chance(virus.chance_of_cure):
+	if Effects.chance(virus.chance_of_cure):
 		is_infected = false
 		is_contagious = false
 		is_symptoms = false
@@ -132,7 +132,7 @@ func on_cure():
 		host.set_color(COLOR_VULNERABLE)
 		emit_signal("SIGNAL_CURED")
 		
-		if virus.chance(virus.chance_of_immune):
+		if Effects.chance(virus.chance_of_immune):
 			is_immune = true
 			host.set_color(COLOR_IMMUNE)
 			emit_signal("SIGNAL_IMMUNE")
@@ -154,5 +154,9 @@ func on_death():
 	timer_to_cure = -1
 	timer_to_symptoms = -1
 	host.is_dead = true
+	is_symptoms = false
+	is_contagious = false
+	is_immune = false
+	is_infected = false
 	host.set_color(host.COLOR_DEATH)
 	emit_signal("SIGNAL_DEATH")

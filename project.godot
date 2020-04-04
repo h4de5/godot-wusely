@@ -19,6 +19,10 @@ config/name="wusely"
 run/main_scene="res://src/game.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Effects="*res://src/autoloads/effects.gd"
+
 [rendering]
 
 quality/intended_usage/framebuffer_allocation=1

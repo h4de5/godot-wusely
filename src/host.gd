@@ -35,6 +35,9 @@ var is_contagious : bool = false setget , get_contagious
 
 func set_dead(val: bool):
 	is_dead = val
+	if val:
+		is_quarantined = false
+		is_hospitalized = false
 func set_quarantined(val: bool):
 	is_quarantined = val
 func set_hospitalized(val: bool):
@@ -102,7 +105,7 @@ func meet(encounter):
 			# and infect encounter only if chance is successfull
 			if infection.is_contagious and \
 				encounter.infectable(infection.virus) and \
-				infection.virus.chance(infection.virus.chance_of_infection):
+				Effects.chance(infection.virus.chance_of_infection):
 				encounter.infect(infection.virus)
 
 # Called when the node enters the scene tree for the first time.
@@ -129,6 +132,9 @@ func _process(delta: float) -> void:
 	#if get_symptoms():
 	if self.is_symptoms:
 		velocity /= 2
+		if !has_sound():
+			# if symptoms are shown - make some noise
+			Effects.cough(self)
 	
 	move_and_slide(velocity)
 	# check if there is a collision:
@@ -140,6 +146,9 @@ func _process(delta: float) -> void:
 			if collision.collider.get_script() == load("res://src/host.gd"):
 				# if 2 hosts meet
 				meet(collision.collider)
+
+func has_sound():
+	return has_node("sound")
 
 # change color modulation of host
 func set_color(color: Color):
