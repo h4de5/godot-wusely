@@ -25,9 +25,6 @@ jobs:
         # download asset pack
       - name: Download Asset Pack
         run: |
-          #echo "github workspace: ${GITHUB_WORKSPACE}"
-          #ls -la "${GITHUB_WORKSPACE}"
-          #sudo apt -yq install wget unzip
           wget -q -O "${GITHUB_WORKSPACE}/assets.zip" "${{ secrets.asset_pack_url }}"
           unzip -oqq "${GITHUB_WORKSPACE}/assets.zip"
           rm -f "${GITHUB_WORKSPACE}/assets.zip"
