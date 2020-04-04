@@ -113,9 +113,13 @@ func _ready():
 	# start color
 	set_color(COLOR_BASE)
 	# start position
-	position = Vector2(randf() * 400 -200, randf() * 400 -200)
+	var boundary : Rect2 = city.get_boundaries()
+	var x = boundary.size.x
+	var y = boundary.size.y
+	
+	position = Vector2(randf() * x*2 - x, randf() * y*2 -y)
 	# start direction
-	direction = Vector2(randf() * 400 -200, randf() * 400 -200)
+	direction = Vector2(randf() * 2 -1, randf() * 2 -1)
 
 func birth(city):
 	self.city = city

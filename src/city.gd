@@ -4,13 +4,21 @@ extends Node
 const host = preload("res://src/host.tscn")
 
 ### city attributes
-export var movement_speed = 1.2
+export var movement_speed = 100
 export var citizens = 120
 export var hospital_beds = 20
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	create_hosts()
+
+func get_boundaries():
+#	var rect= get_viewport_rect()
+#	rect.get_position_in_parent()
+#	get_node("border").get_position_in_parent()
+#	get_node("border").get
+##	Rect2
+	return Rect2(Vector2(10,10), Vector2(450,250))
 
 # add all hosts to the city scene
 func create_hosts():
