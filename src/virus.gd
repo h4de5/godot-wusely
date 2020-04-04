@@ -9,9 +9,9 @@ const time_to_contagion = 20
 # how long does it take for someone to see symptoms
 const time_to_symptoms = 50
 # how long does it take to get cured (once in hospitality)
-const time_to_cure = 100
+const time_to_cure = 150
 # how long does it take until you die
-const time_to_death = 200
+const time_to_death = 250
 
 # TODO - missing time variations
 # when does cure start? - immediatly after infection
@@ -22,7 +22,7 @@ const time_to_death = 200
 # 
 
 # how likely it is to infect other people
-const chance_of_infection : float = 0.8
+const chance_of_infection : float = 0.95
 # how likely it is to show symptoms
 const chance_of_contagion : float = 1.0
 # how likely it is to show symptoms

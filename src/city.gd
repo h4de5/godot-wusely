@@ -5,8 +5,9 @@ const host = preload("res://src/host.tscn")
 
 ### city attributes
 export var movement_speed = 100
-export var citizens = 120
+export var citizens = 100
 export var hospital_beds = 20
+export var social_distance = 150
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,7 +27,21 @@ func create_hosts():
 	for i in range(citizens):
 		citizen = host.instance()
 		citizen.birth(self)
+#		citizen.position = Vector2((i+1) * 100,(i+1) * 100)
+#		citizen.direction = Vector2(i%2,i%2)
 		get_node("hosts").add_child(citizen)
+#	citizen = host.instance()
+#	citizen.birth(self)
+#	citizen.position = Vector2(-200, 105)
+#	citizen.direction = Vector2(1,0)
+#	get_node("hosts").add_child(citizen)
+#
+#	citizen = host.instance()
+#	citizen.birth(self)
+#	citizen.position = Vector2(200, 100)
+#	citizen.direction = Vector2(-1,0)
+#	get_node("hosts").add_child(citizen)
+		
 	outbreak()
 
 # set the virus free

@@ -6,6 +6,8 @@ const COLOR_DEATH = Color.black
 
 # TODO - get each host a randomize name
 onready var sprite = get_node("Sprite")
+onready var area = get_node("Area")
+onready var area_shape = get_node("Area/Shape")
 onready var infections = get_node("Infections")
 
 ### host attributes
@@ -116,29 +118,68 @@ func _ready():
 	var boundary : Rect2 = city.get_boundaries()
 	var x = boundary.size.x
 	var y = boundary.size.y
-	
+	randomize()
 	position = Vector2(randf() * x*2 - x, randf() * y*2 -y)
 	# start direction
 	direction = Vector2(randf() * 2 -1, randf() * 2 -1)
+	
+	movement_speed = city.movement_speed
+	area_shape.shape.radius = city.social_distance
+	
+	add_to_group("HOST")
 
 func birth(city):
 	self.city = city
-	movement_speed = city.movement_speed
 	
-func _process(delta: float) -> void:
-	 # Get velocity
-	var velocity = movement_speed * direction
+func _physics_process(delta: float) -> void:
+	
 	
 	# if host is dead - slowing down until stopping
 	if is_dead:
-		movement_speed *= 0.98
-	# if host show symptoms, drop movement speed
-	#if get_symptoms():
-	if self.is_symptoms:
-		velocity /= 2
+		movement_speed *= 0.99
+		direction *= 0.99
+	
+	elif self.is_symptoms:
 		if !has_sound():
 			# if symptoms are shown - make some noise
 			Effects.cough(self)
+		
+		# check which hosts are nearby
+		var nearby_hosts = area.get_overlapping_areas()
+		if len(nearby_hosts) > 0:
+			for nearby_host in nearby_hosts:
+#				print("found host: ", nearby_host)
+#				print("direction: ", (nearby_host.position - self.position))
+#				print("normalized: ", (nearby_host.position - self.position).normalized())
+#				print("length: ", (nearby_host.position - self.position).length())
+#				print("distance: ", (nearby_host.position - self.position).length())
+#				print("#####")
+#				direction = ( (self.position - ).normalized()).normalized()
+#				direction = self.position.reflect((nearby_host.position - self.position).normalized())
+				var collision_vector = nearby_host.global_position - self.position
+				var normalized_direction = collision_vector.normalized()
+				var inverse_distance = area_shape.shape.radius*2 - collision_vector.length()
+#				var inverse_distance_lerped = 1 - inverse_lerp(0, area_shape.shape.radius*2, collision_vector.length())
+				var inverse_distance_lerped = 1 - inverse_lerp(0, pow(area_shape.shape.radius*2, 2), pow(collision_vector.length(),2) )
+#
+#				print("positions: ", nearby_host.position, " self: ", self.position)
+#				print("area_shape.shape.radius: ", area_shape.shape.radius)
+#				print("collision_vector: ", collision_vector)
+#				print("vector_length: ", collision_vector.length())
+#				print("normalized_direction: ", normalized_direction)
+#				print("inverse_distance: ", inverse_distance)
+#				print("inverse_distance_lerped: ", inverse_distance_lerped)
+#				print("#####")
+
+#				direction = direction - (inverse_distance_lerped * normalized_direction * delta) / (len(nearby_hosts))
+				nearby_host.owner.direction = nearby_host.owner.direction + (inverse_distance_lerped * normalized_direction * delta) / (len(nearby_hosts))
+
+	 # Get velocity
+	var velocity = movement_speed * direction
+	
+	# if host show symptoms, drop movement speed
+	if self.is_symptoms:
+		velocity /= 1.5
 	
 	move_and_slide(velocity)
 	# check if there is a collision:
@@ -150,6 +191,8 @@ func _process(delta: float) -> void:
 			if collision.collider.get_script() == load("res://src/host.gd"):
 				# if 2 hosts meet
 				meet(collision.collider)
+	else: # only if no collision was registered
+		pass
 
 func has_sound():
 	return has_node("sound")

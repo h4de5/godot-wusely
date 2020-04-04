@@ -74,6 +74,10 @@ func play(sound, position = null, parent = null):
 		player.stream = load(sound)
 	else:
 		player.stream = sound
+		
+	# randomize pitch - credits to CW
+	player.pitch_scale = randf() * 0.2 + 0.9
+	
 	# play the sound
 	player.play()
 
