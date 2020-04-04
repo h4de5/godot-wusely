@@ -30,7 +30,7 @@ jobs:
           rm -f "${GITHUB_WORKSPACE}/assets.zip"
 
       - name: export game
-        # Use version 1.0.0 (see releases for all versions)
+        # Use version 1.2.0 (see releases for all versions)
         uses: firebelley/godot-export@v1.2.0
         with:
           # Base version. Patch versions are incremented when this action runs.
@@ -45,3 +45,10 @@ jobs:
           godot_template_version: 3.2.1.stable
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # deploy to github pages
+      # - name: Deploy to github pages
+      #   run: |
+      #     ls -la /home/runner/.local/share/godot/builds/1
+      #     # sudo apt -yq install rsync openssh-client sshpass
+      #     # upload only web build to preview web server
+      #     rsync -vv /home/runner/.local/share/godot/builds/1/* --rsync-path="/bin/rsync" --port="${{ secrets.UPLOAD_PORT }}" --rsh="/usr/bin/sshpass -p ${{ secrets.UPLOAD_PASS }} ssh -o StrictHostKeyChecking=no -l ${{ secrets.UPLOAD_USER }} -p ${{ secrets.UPLOAD_PORT }}" ${{ secrets.UPLOAD_USER }}@${{ secrets.UPLOAD_HOST }}:${{ secrets.UPLOAD_PATH }}
