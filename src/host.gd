@@ -175,6 +175,8 @@ func _physics_process(delta: float) -> void:
 		if !has_sound():
 			# if symptoms are shown - make some noise
 			Effects.cough(self)
+	else:
+		trail.visible = false
 
 	set_outline(sprite.modulate)
 	
