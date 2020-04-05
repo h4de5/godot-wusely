@@ -2,12 +2,15 @@ extends Node
 
 # a single host
 const host = preload("res://src/host.tscn")
+#const TRAIL_MAX_LENGTH = 30
+
 
 ### city attributes
 export var movement_speed = 100
 export var citizens = 100
 export var hospital_beds = 20
-export var social_distance = 150
+export var social_distance = 40
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

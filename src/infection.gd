@@ -18,6 +18,7 @@ signal SIGNAL_SYMPTOMS
 signal SIGNAL_CURED
 signal SIGNAL_IMMUNE
 signal SIGNAL_DEATH
+signal SIGNAL_INFECTION_CHANGE
 
 # infection.connect("SIGNAL_VULNERABLE", infection, "on_contagion")
 # infection.emit_signal("SIGNAL_CONTAGIOUS")
@@ -110,18 +111,21 @@ func on_infected():
 	is_infected = true
 	host.set_color(COLOR_INFECTED)
 	emit_signal("SIGNAL_INFECTED")
+	emit_signal("SIGNAL_INFECTION_CHANGE", "is_infected", is_infected)
 	
 func on_contagion():
 	if Effects.chance(virus.chance_of_contagion):
 		is_contagious = true
 		host.set_color(COLOR_CONTAGIOUS)
 		emit_signal("SIGNAL_CONTAGIOUS")
+		emit_signal("SIGNAL_INFECTION_CHANGE", "is_contagious", is_contagious)
 
 func on_symptoms():
 	if Effects.chance(virus.chance_of_symptoms):
 		is_symptoms = true
 		host.set_color(COLOR_SYMPTOMS)
 		emit_signal("SIGNAL_SYMPTOMS")
+		emit_signal("SIGNAL_INFECTION_CHANGE", "is_symptoms", is_symptoms)
 
 func on_cure():
 	if Effects.chance(virus.chance_of_cure):
@@ -129,17 +133,21 @@ func on_cure():
 		is_contagious = false
 		is_symptoms = false
 		timer_to_death = -1
-		host.set_color(COLOR_VULNERABLE)
 		emit_signal("SIGNAL_CURED")
+		emit_signal("SIGNAL_INFECTION_CHANGE", "is_infected", false)
+		emit_signal("SIGNAL_INFECTION_CHANGE", "is_contagious", false)
+		emit_signal("SIGNAL_INFECTION_CHANGE", "is_symptoms", false)
 		
 		if Effects.chance(virus.chance_of_immune):
 			is_immune = true
 			host.set_color(COLOR_IMMUNE)
 			emit_signal("SIGNAL_IMMUNE")
+			emit_signal("SIGNAL_INFECTION_CHANGE", "is_immune", is_immune)
 			
 		else:
 			# was not immunized
-			pass
+			host.set_color(COLOR_VULNERABLE)
+			emit_signal("SIGNAL_VULNERABLE")
 	else:
 		# could not be cured..
 		# another try after timer_to_cure
@@ -160,3 +168,8 @@ func on_death():
 	is_infected = false
 	host.set_color(host.COLOR_DEATH)
 	emit_signal("SIGNAL_DEATH")
+	emit_signal("SIGNAL_INFECTION_CHANGE", "is_infected", false)
+	emit_signal("SIGNAL_INFECTION_CHANGE", "is_contagious", false)
+	emit_signal("SIGNAL_INFECTION_CHANGE", "is_symptoms", false)
+	emit_signal("SIGNAL_INFECTION_CHANGE", "is_immune", false)
+	emit_signal("SIGNAL_INFECTION_CHANGE", "is_dead", host.is_dead)

@@ -13,5 +13,5 @@ func _physics_process(delta: float) -> void:
 	
 	tmp += delta
 	if tmp > 3:
-		tmp = 0
-#		print("sum speed: ",sum_speed)
+		tmp -= 3
+		print("sum speed: ",sum_speed)
