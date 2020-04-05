@@ -29,7 +29,7 @@ jobs:
           unzip -oqq "${GITHUB_WORKSPACE}/assets.zip"
           rm -f "${GITHUB_WORKSPACE}/assets.zip"
 
-      - name: export game
+      - name: Export Godot game
         # Use version 1.2.0 (see releases for all versions)
         uses: firebelley/godot-export@v1.2.0
         with:
@@ -43,6 +43,30 @@ jobs:
           relative_project_path: ./
           # The name of the folder which templates are stored in. Looks like '3.1.1.stable.mono'. Can be found at %APPDATA\Roaming\Godot\templates on Windows and ~/.local/share/godot/templates on Linux.
           godot_template_version: 3.2.1.stable
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # checkout gh-pages branch in a different directory
+      - name: Setup github pages
+        uses: actions/checkout@v2
+        with:
+          path: github_pages
+          ref: gh-pages
+
+      # copy generated web export (2nd export preset)
+      - name: Copy web export
+        run: |
+          cp -f /home/runner/.local/share/godot/builds/2/* ${GITHUB_WORKSPACE}/github_pages
+          ls -lha ${GITHUB_WORKSPACE}
+          ls -lha ${GITHUB_WORKSPACE}/github_pages
+
+      # deploy directory to github pages
+      - name: Deploy github pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          target_branch: gh-pages
+          build_dir: github_pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # deploy to github pages
